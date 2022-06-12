@@ -14,6 +14,14 @@ function extarctQueryParams(query, search_params)
     }
 }
 function searchForRecipes(search_params)
-{
-
+{  
+    let a = "https://api.spoonacular.com/recipes/complexSearch?query=";
+    for (let i = 0; i < search_params.length; i=i+2) {
+        a += search_params[i];
+        a += "=";
+        a += search_params[i+1];
+        a += "&";
+      } 
+      a = a.slice(0, -1);
+      return await axios.get(`${a}`);
 }
