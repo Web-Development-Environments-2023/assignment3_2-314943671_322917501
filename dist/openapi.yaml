@@ -1,8 +1,13 @@
 openapi: 3.0.0
 info:
-  title: Recipes api
+  title: Recipes API
   description: API for recipes project
   version: 1.0.1
+  contact:
+    email: lidorash@post.bgu.ac.il
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 servers:
 # local:
 - url: "http://127.0.0.1:3000"
@@ -98,7 +103,7 @@ paths:
             schema:
               type: object
               properties:
-                reciepeId:
+                recipeId:
                   type: string
                   description: reciepe's id which the user saved
                   example: 716429
@@ -109,6 +114,101 @@ paths:
           description: user is not authorized
       security:
       - cookieAuth: []
+
+  /users/watched:
+    get:
+      tags:
+      - Users
+      summary: Return the watched recipes that were watched by the user
+      description: Get an array of recipes that were watched by a specific user
+      responses:
+        "200":
+          description: data about the user's watched recipes returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipePreview'
+        "401":
+          description: user is not authorized
+      security:
+      - cookieAuth: []
+
+  /users/myRecipes:
+    get:
+      tags:
+      - Users
+      summary: Return the recipes that were added by the user
+      description: Get an array of recipes that were added by a specific user
+      responses:
+        "200":
+          description: data about the user's owned recipes returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipePreview'
+        "401":
+          description: user is not authorized
+      security:
+      - cookieAuth: []
+    post:
+      tags:
+      - Users
+      summary: save recipe in the owned recipes list of a user
+      description: save recipe in the owned recipes list of a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: reciepe's name which the user saved
+                  example: Cookies
+                readyInMinutes:
+                  type: integer
+                  description: reciepe's time to make
+                  example: 30
+                image:
+                  type: string
+                  description: picture of the recipe
+                  example: Cookies.jpg
+                vegan: 
+                  type: boolean
+                  description: is the recipe for vegan?
+                  example: false
+                vegetarian:
+                  type: boolean
+                  description: is the recipe for vegetarian?
+                  example: true
+                glutenFree:
+                  type: boolean
+                  description: is the recipe gluten free?
+                  example: false
+                ingredients:
+                  type: string
+                  description: ingredients of the recipe
+                  example: 1 milk, 3 eggs, 1 flour
+                instructions:
+                  type: string
+                  description: instructions of the recipe
+                  example: just do it  
+                servings:
+                  type: integer
+                  description: number of servings of the recipe
+                  example: 10       
+      responses:
+        "200":
+          description: The Recipe successfully added to the list
+        "401":
+          description: user is not authorized
+      security:
+      - cookieAuth: []
+
   /recipes/{recipeId}:
     get:
       tags:
@@ -133,6 +233,59 @@ paths:
                 $ref: '#/components/schemas/RecipePreview'
         "404":
           description: recipeId is not exists
+  /recipes/random:
+    get:
+      tags:
+      - Recipes
+      summary: Return preview details on 3 random recipes
+      description: Return preview details on 3 random recipes
+      responses:
+        "200":
+          description: data about the recipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipePreview'
+        "404":
+          description: not found
+
+  /recipes/search/query/{searchQuery}/amount/{num}:
+    post:
+      tags:
+      - Recipes
+      summary: Search for recipes in API
+      description: Search for recipes in API
+      parameters:
+      - name: searchQuery
+        in: path
+        description: query in words
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: num
+        in: path
+        description: number of results
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Parameters for query (can be cuisine/diet/intolerance)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryBodyParams'
+        required: false
+      responses:
+        "200":
+          description: data about the recipe
+          
+        "404":
+          description: not found
+
 components:
   schemas:
     User:
@@ -227,4 +380,18 @@ components:
           type: boolean
           description: indication if the recipe is gluten free
           example: false
-  
+    QueryBodyParams:
+      type: object
+      properties:
+        cuisine:
+          type: string
+          description: cuisine of recipe
+          example: italian
+        diet:
+          type: string
+          description: diet kind of recipe
+          example: vegetarian
+        intolerances:
+          type: string
+          description: intolerance kind of recipe
+          example: Gluten

@@ -65,7 +65,7 @@ router.get("/:recipeId", async (req, res, next) => {
  * Will return results from spooncular API, according to number param.
  * Result will be preview recipe.
  */
-router.get("/search/query/:searchQuery/amount/:num", async (req, res, next) => {
+router.post("/search/query/:searchQuery/amount/:num", async (req, res, next) => {
   const {searchQuery, num} = req.params;
   //set serach params
   search_params = {};

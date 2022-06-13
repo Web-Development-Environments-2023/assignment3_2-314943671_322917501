@@ -28,6 +28,7 @@ router.post('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
     const recipe_id = req.body.recipeId;
+    //console.log(recipe_id); ////////////
     const recipes_id = await user_utils.getFavoriteRecipes(user_id);
     let recipes_id_array = [];
     recipes_id.map((element) => recipes_id_array.push(element.recipe_id));
@@ -96,8 +97,17 @@ router.get('/favorites', async (req,res,next) => {
 
     const user_id = req.session.user_id;
     //const recipe_id = req.body.recipeId;
-    await user_utils.addMyRecipes(user_id, recipe_details);
-    res.status(200).send("The Recipe added successfully");
+    const recipes_id = await user_utils.getMyRecipes(user_id);
+    let recipes_id_array = [];
+    recipes_id.map((element) => recipes_id_array.push(element.title.toLowerCase()));
+    console.log(recipes_id_array);
+    if(!recipes_id_array.includes(recipe_details.title.toLowerCase())) {
+      await user_utils.addMyRecipes(user_id, recipe_details);
+      res.status(200).send("The Recipe added successfully");
+    }
+    else {
+      res.status(400).send("The Recipe was already added before");
+    }
     } catch(error){
     next(error);
   }
