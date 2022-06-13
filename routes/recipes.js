@@ -79,7 +79,7 @@ router.get("/search/query/:searchQuery/amount/:num", async (req, res, next) => {
     search_params.number = 5;
   }
   //check if query params exists (cuisine / diet / intolerances) and add them to serach_params
-  search_utils.extarctQueryParams(req.query, search_params);
+  search_utils.extarctQueryParams(req.body, search_params);
   search_utils.searchForRecipes(search_params)
   .then((recipes) => res.send(recipes))
   .catch((err) => {
