@@ -33,7 +33,9 @@ async function searchForRecipes(search_params) {
         a += `number=${search_params.number}&`;
     }
 
-    a = a.slice(0, -1);
+    a += "addRecipeInformation=true";
+
+    //a = a.slice(0, -1);
     console.log(a);
     const response = await axios.get(`${a}`, {
         params: {
