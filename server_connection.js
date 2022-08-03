@@ -13,7 +13,7 @@ var httpsOptions = {
  */
 var port = normalizePort(process.env.PORT || '443');
 
-app.set('port', port);
+//app.set('port', port);
 
 /**
  * Create HTTP server.
@@ -74,8 +74,8 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-server.address("https://recipeideas.cs.bgu.ac.il");
-function onListening() {
+ server.address("https://recipeideas.cs.bgu.ac.il");
+ function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
