@@ -13,7 +13,7 @@ var httpsOptions = {
  */
 var port = normalizePort(process.env.PORT || '443');
 
-//app.set('port', port);
+app.set('port', port);
 
 /**
  * Create HTTP server.
