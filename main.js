@@ -26,15 +26,15 @@ app.use(
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, "public"))); //To serve static files such as images, CSS files, and JavaScript files
 //local:
-app.use(express.static(path.join(__dirname, "dist")));
+//app.use(express.static(path.join(__dirname, "dist")));
 //remote:
-// app.use(express.static(path.join(__dirname, '../assignment-3-3-basic/dist')));
+ app.use(express.static(path.join(__dirname, '../assignment3-3-314943671_322917501/dist')));
 app.get("/",function(req,res)
 { 
   //remote: 
-  // res.sendFile(path.join(__dirname, '../assignment-3-3-basic/dist/index.html'));
+   res.sendFile(path.join(__dirname, '../assignment3-3-314943671_322917501/dist/index.html'));
   //local:
-  res.sendFile(__dirname+"/index.html");
+  //res.sendFile(__dirname+"/index.html");
 
 });
 
@@ -101,3 +101,6 @@ process.on("SIGINT", function () {
   }
   process.exit();
 });
+
+module.exports = app;
+
