@@ -58,6 +58,8 @@ const auth = require("./routes/auth");
 
 //#region cookie middleware
 app.use(function (req, res, next) {
+  // console.log(req.session);
+  
   if (req.session && req.session.user_id) {
     DButils.execQuery("SELECT username FROM users")
       .then((users) => {
