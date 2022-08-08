@@ -11,11 +11,11 @@ async function getFavoriteRecipes(user_id){
 
 
 async function markAsWatched(user_id, recipe_id){
-    await DButils.execQuery(`INSERT INTO watchedrecipes VALUES ('${user_id}','${recipe_id}')`);
+    await DButils.execQuery(`INSERT INTO watchedrecipes (user_id,recipe_id) VALUES ('${user_id}','${recipe_id}')`);
 }
 
 async function getWatchedRecipes(user_id){
-    const recipes_id = await DButils.execQuery(`select recipe_id from watchedrecipes where user_id='${user_id}'`);
+    const recipes_id = await DButils.execQuery(`select recipe_id,time from watchedrecipes where user_id='${user_id}' order by time DESC`);
     return recipes_id;
 }
 
@@ -34,6 +34,11 @@ async function getMyRecipes(user_id){
 }
 
 
+async function getFamilyRecipes(user_id){
+    const recipes_id = await DButils.execQuery(`select * from familyrecipes where user_id='${user_id}'`);
+    return recipes_id;
+}
+
 
 
 exports.markAsFavorite = markAsFavorite;
@@ -42,3 +47,4 @@ exports.markAsWatched = markAsWatched;
 exports.getWatchedRecipes = getWatchedRecipes;
 exports.addMyRecipes = addMyRecipes;
 exports.getMyRecipes = getMyRecipes;
+exports.getFamilyRecipes = getFamilyRecipes;
