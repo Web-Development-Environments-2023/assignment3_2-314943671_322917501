@@ -15,7 +15,7 @@ async function markAsWatched(user_id, recipe_id){
 }
 
 async function getWatchedRecipes(user_id){
-    const recipes_id = await DButils.execQuery(`select recipe_id,time from watchedrecipes where user_id='${user_id}' order by time DESC`);
+    const recipes_id = await DButils.execQuery(`select recipe_id from watchedrecipes where user_id='${user_id}' order by time DESC`);
     return recipes_id;
 }
 
