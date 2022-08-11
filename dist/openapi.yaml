@@ -1,19 +1,23 @@
 openapi: 3.0.0
 info:
   title: Recipes API
-  description: API for recipes project
-  version: 1.0.1
+  description: API for recipes project. <br /> Writen by Lidor Ashtamker & Chen Kolely.
+  version: '1.2'
   contact:
     email: lidorash@post.bgu.ac.il
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 servers:
+# Added by API Auto Mocking Plugin
+- description: SwaggerHub API Auto Mocking
+  url: https://virtserver.swaggerhub.com/LidorAsh/RecipeIdeas/1.2
 # local:
 - url: "http://127.0.0.1:3000"
+  description: LocalHost
 # remote:
-# - url: "http://132.72.65.211"
-  description: SwaggerHub API Auto Mocking hey
+- url: "https://recipeideas.cs.bgu.ac.il"
+  description: Remote Server
 tags:
 - name: Auth
   description: All authentication related routes
@@ -91,7 +95,7 @@ paths:
         "401":
           description: user is not authorized
       security:
-      - cookieAuth: []
+        - cookieAuth: []
     post:
       tags:
       - Users
@@ -113,17 +117,60 @@ paths:
         "401":
           description: user is not authorized
       security:
-      - cookieAuth: []
-
+        - cookieAuth: []
+        
+  /users/favoritesId:
+    get:
+      tags:
+      - Users
+      summary: Return the ID's of favorite recipes that were saved by user
+      description: Get an array of recipes ID's that were saved by a specific user
+      responses:
+        "200":
+          description: data about the user's favorites recipes ID's returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+                  example: 632075
+        "401":
+          description: user is not authorized
+      security:
+        - cookieAuth: []
+          
   /users/watched:
     get:
       tags:
       - Users
-      summary: Return the watched recipes that were watched by the user
+      summary: Return the watched id's recipes that were watched by the user
+      description: Get an array of recipes id's that were watched by a specific user
+      responses:
+        "200":
+          description: data about the user's watched recipes id's returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 632075
+                    
+        "401":
+          description: user is not authorized
+      security:
+        - cookieAuth: []
+        
+  /users/lastViewedRecipes:
+    get:
+      tags:
+      - Users
+      summary: Return the 3 last watched recipes that were watched by the user
       description: Get an array of recipes that were watched by a specific user
       responses:
         "200":
-          description: data about the user's watched recipes returned
+          description: data about the user's last watched recipes returned
           content:
             application/json:
               schema:
@@ -133,7 +180,7 @@ paths:
         "401":
           description: user is not authorized
       security:
-      - cookieAuth: []
+        - cookieAuth: []
 
   /users/myRecipes:
     get:
@@ -153,7 +200,8 @@ paths:
         "401":
           description: user is not authorized
       security:
-      - cookieAuth: []
+        - cookieAuth: []
+     
     post:
       tags:
       - Users
@@ -176,7 +224,7 @@ paths:
                 image:
                   type: string
                   description: picture of the recipe
-                  example: Cookies.jpg
+                  example: https://static.fanpage.it/wp-content/uploads/sites/22/2022/02/Chocolate-chip-cookies-14.jpg
                 vegan: 
                   type: boolean
                   description: is the recipe for vegan?
@@ -207,7 +255,27 @@ paths:
         "401":
           description: user is not authorized
       security:
-      - cookieAuth: []
+        - cookieAuth: []
+        
+  /users/familyRecipes:
+    get:
+      tags:
+      - Users
+      summary: Return the family recipes of the user
+      description: Get an array of the family recipes of a specific user
+      responses:
+        "200":
+          description: data about the user's family recipes returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipePreview'
+        "401":
+          description: user is not authorized
+      security:
+        - cookieAuth: []
 
   /recipes/{recipeId}:
     get:
@@ -267,7 +335,7 @@ paths:
       - name: num
         in: path
         description: number of results
-        required: false
+        required: true
         style: simple
         explode: false
         schema:
@@ -287,6 +355,11 @@ paths:
           description: not found
 
 components:
+  securitySchemes:
+    cookieAuth:  # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: session  # cookie name
   schemas:
     User:
       type: object
