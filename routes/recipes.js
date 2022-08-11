@@ -45,15 +45,12 @@ router.get("/:recipeId", async (req, res, next) => {
     const recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
     const user_id = req.session.user_id;
     const recipe_id = req.params.recipeId;
-    //console.log(user_id); /////////////
-    //console.log(recipe_id); ///////////////
     const recipes_id = await user_utils.getWatchedRecipes(user_id);
     let recipes_id_array = [];
     recipes_id.map((element) => recipes_id_array.push(element.recipe_id));
-    //console.log(recipes_id_array)
-    if(!recipes_id_array.includes(recipe_id)) {
+    // if(!recipes_id_array.includes(recipe_id)) {
       await user_utils.markAsWatched(user_id,recipe_id);
-    }
+    // }
     res.send(recipe);
   } catch (error) {
     next(error);
