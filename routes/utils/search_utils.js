@@ -36,7 +36,7 @@ async function searchForRecipes(search_params) {
     a += "addRecipeInformation=true";
 
     //a = a.slice(0, -1);
-    console.log(a);
+    console.log("url", a);
     const response = await axios.get(`${a}`, {
         params: {
             apiKey: process.env.spooncular_apiKey
